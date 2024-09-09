@@ -22,6 +22,7 @@ function Form() {
     e.preventDefault();
     try {
       let { data } = await userLogin(values);
+console.log(data);
 
       if (data.errors) {
         if (data.errors.email) {
