@@ -4,12 +4,12 @@ import { BaseUrl } from "../BaseUrls/constance";
 import { useState } from "react";
 import "flowbite/dist/flowbite.css";
 import { Card } from "flowbite-react";
-import { ProductPage } from "../Pages/ProductPage";
+
 import { useNavigate } from "react-router-dom";
 export function Cards() {
   const [products, setProducts] = useState([]);
-  const [showDetails, setShowDetails] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     getAllProducts();
@@ -25,12 +25,23 @@ export function Cards() {
       if (error.response) {
         console.error("Server error:", error.response.data.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleClick = (product) => {
     navigate(`/product/${product._id}`);
   };
+
+  if (loading) {
+    return <div className="text-center mt-10">Loading products...</div>;
+  }
+
+  if (products.length === 0) {
+    return <div className="text-center mt-10">No products available.</div>;
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
       {products &&
